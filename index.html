@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Dolape - Psicoanálisis Online</title>
+    <title>Clínica Sereno - Psicoterapia Online</title>
     
-    <!-- Scripts & Fonts -->
+    <!-- Scripts & Fuentes -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://meet.jit.si/external_api.js"></script>
     
-    <!-- Tailwind Configuration (Teal, Beige, Soft Gray Theme) -->
+    <!-- Configuración de Colores y Tipografía (AQUÍ PUEDES CAMBIAR LOS COLORES) -->
     <script>
         tailwind.config = {
             theme: {
@@ -22,23 +22,20 @@
                     },
                     colors: {
                         brand: {
-                            // Deep Teals
-                            900: '#134e4a',
+                            900: '#134e4a', /* Verde oscuro */
                             800: '#115e59',
                             700: '#0f766e',
                             600: '#0d9488',
-                            500: '#14b8a6',
+                            500: '#14b8a6', /* Verde claro */
                         },
                         base: {
-                            // Warm Beiges
-                            50: '#fafaf9',
+                            50: '#fafaf9',  /* Fondo crema claro */
                             100: '#f5f5f4',
                             200: '#e7e5e4',
                             300: '#d6d3d1',
                         },
                         muted: {
-                            // Soft Grays
-                            500: '#78716c',
+                            500: '#78716c', /* Grises cálidos para textos */
                             600: '#57534e',
                             800: '#292524',
                         }
@@ -65,21 +62,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Custom Scrollbar - Warm toned */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f5f5f4; }
-        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
-
-        /* Subtle organic pattern for hero */
         .hero-pattern {
             background-color: #f5f5f4;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d6d3d1' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen selection:bg-brand-700 selection:text-white">
+<body class="flex flex-col min-h-screen">
 
+    <!-- Barra de Navegación -->
     <nav class="bg-base-50/90 backdrop-blur-md border-b border-base-200 sticky top-0 z-40 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
@@ -87,369 +78,338 @@
                 <div class="flex items-center cursor-pointer" onclick="switchView('home')">
                     <i class="ph ph-spiral text-4xl text-brand-700 mr-3"></i>
                     <div>
-                        <span class="block text-xl font-serif text-brand-900 leading-none tracking-wide">El Dolape - Psicoanálisis Online</span>
-                        <span class="block text-[10px] text-muted-500 uppercase tracking-widest mt-1">Psicoanálisis</span>
+                        <span class="block text-xl font-serif text-brand-900 leading-none tracking-wide">Clínica Sereno</span>
+                        <span class="block text-[10px] text-muted-500 uppercase tracking-widest mt-1">Psicoterapia Online</span>
                     </div>
                 </div>
 
-                <!-- Desktop Menu -->
+                <!-- Menú Escritorio -->
                 <div class="hidden md:flex items-center space-x-2">
                     <button onclick="switchView('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-brand-800 font-medium bg-brand-50 transition-colors">Inicio</button>
-                    <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors">Mis Citas</button>
-                    <button onclick="switchView('booking')" id="nav-booking" class="nav-btn px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors">Reservar Sesión</button>
+                    <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors hidden">Mis Citas</button>
+                    <button onclick="switchView('booking')" id="nav-booking" class="nav-btn px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors hidden">Reservar Sesión</button>
                     <button onclick="switchView('admin')" id="nav-admin" class="nav-btn px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors flex items-center gap-1">
                         <i class="ph ph-gear"></i> Admin
                     </button>
+                    
                     <div class="w-px h-6 bg-base-300 mx-2"></div>
-                    <button onclick="switchView('video')" id="nav-video" class="nav-btn ml-2 px-5 py-2.5 rounded-lg bg-brand-800 text-white hover:bg-brand-900 transition-colors shadow-md flex items-center gap-2 font-medium">
-                        <i class="ph ph-video-camera"></i> Entrar a Sesión
+                    
+                    <!-- Botones de Acceso -->
+                    <button onclick="switchView('login')" id="btn-login-nav" class="nav-btn ml-2 px-5 py-2.5 rounded-lg border border-brand-800 text-brand-800 hover:bg-brand-50 transition-colors font-medium">
+                        Acceso Pacientes
                     </button>
-                </div>
-
-                <!-- Mobile Menu Toggle -->
-                <div class="flex items-center md:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-brand-900 focus:outline-none p-2">
-                        <i class="ph ph-list text-3xl"></i>
+                    <button onclick="logoutUser()" id="btn-logout-nav" class="hidden nav-btn ml-2 px-5 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium">
+                        Cerrar Sesión
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-base-50 z-50 hidden flex-col pt-24 px-6">
-        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-brand-900 text-3xl p-2">
-            <i class="ph ph-x"></i>
-        </button>
-        <div class="flex flex-col space-y-6 text-center">
-            <button onclick="switchView('home'); toggleMobileMenu()" class="text-2xl font-serif text-brand-900 border-b border-base-200 pb-4">Inicio</button>
-            <button onclick="switchView('dashboard'); toggleMobileMenu()" class="text-2xl font-serif text-brand-900 border-b border-base-200 pb-4">Mis Citas</button>
-            <button onclick="switchView('booking'); toggleMobileMenu()" class="text-2xl font-serif text-brand-900 border-b border-base-200 pb-4">Reservar Sesión</button>
-            <button onclick="switchView('admin'); toggleMobileMenu()" class="text-2xl font-serif text-brand-900 border-b border-base-200 pb-4">Administración</button>
-            <button onclick="switchView('video'); toggleMobileMenu()" class="text-2xl font-serif text-brand-700 flex items-center justify-center gap-2 pt-4">
-                <i class="ph ph-video-camera"></i> Entrar a Sesión
-            </button>
-        </div>
-    </div>
-
-    <!-- Main Application Container -->
+    <!-- Contenedor Principal de Vistas -->
     <main class="flex-1 relative flex flex-col w-full">
         
+        <!-- VISTA: INICIO -->
         <section id="view-home" class="view-section flex-1 fade-in block">
-            <!-- Hero Section -->
-            <div class="relative overflow-hidden bg-base-100 pt-16 pb-24 md:pt-28 md:pb-36 border-b border-base-200">
+            <!-- Portada (Hero) -->
+            <div class="relative overflow-hidden bg-base-100 pt-16 pb-24 md:pt-20 md:pb-28 border-b border-base-200">
                 <div class="absolute inset-0 hero-pattern z-0 opacity-60"></div>
-                <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <span class="inline-block py-1 px-4 rounded-full border border-brand-700/30 text-brand-800 text-sm font-medium tracking-widest uppercase mb-8 bg-base-50/50 backdrop-blur-sm">Espacio de Escucha</span>
+                <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     
-                    <!-- DYNAMIC TEXT TARGETS FOR CMS -->
-                    <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl text-brand-900 mb-8 leading-tight font-serif">
-                        <i class="ph ph-circle-notch animate-spin inline-block text-brand-300"></i> Cargando...
-                    </h1>
-                    <p id="hero-desc" class="mt-4 text-lg md:text-xl text-muted-600 mx-auto mb-12 leading-relaxed max-w-3xl">
-                        Conectando con la base de datos para cargar su contenido...
-                    </p>
-                    
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onclick="switchView('booking')" class="px-8 py-4 text-lg bg-brand-800 text-base-50 rounded-lg hover:bg-brand-900 shadow-lg shadow-brand-900/20 transition-all transform hover:-translate-y-0.5 font-medium">
-                            Iniciar mi proceso
-                        </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span class="inline-block py-1 px-4 rounded-full border border-brand-700/30 text-brand-800 text-sm font-medium tracking-widest uppercase mb-6 bg-base-50/50 backdrop-blur-sm">Espacio de Escucha</span>
+                            
+                            <!-- Textos del CMS -->
+                            <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-5xl text-brand-900 mb-6 leading-tight font-serif">
+                                Encuentra la raíz de tu bienestar emocional
+                            </h1>
+                            <p id="hero-desc" class="text-lg text-muted-600 mb-8 leading-relaxed">
+                                La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento. No solo tratamos el síntoma, exploramos tu historia para sanar desde el origen, todo desde la comodidad de tu hogar.
+                            </p>
+                            
+                            <button onclick="checkAuthAndBook()" class="px-8 py-4 text-lg bg-brand-800 text-base-50 rounded-lg hover:bg-brand-900 shadow-lg shadow-brand-900/20 transition-all font-medium">
+                                Solicitar Primera Cita
+                            </button>
+                        </div>
+
+                        <!-- AQUÍ SE PONE UNA FOTO -->
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-brand-500 rounded-2xl transform translate-x-4 translate-y-4 opacity-20"></div>
+                            <!-- Cambia el 'src' por el enlace de tu foto -->
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Psicoterapia Online" class="relative z-10 rounded-2xl shadow-xl border-4 border-white w-full object-cover h-[400px]">
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Sección Información Fija -->
             <div class="py-24 bg-base-50">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-                        <div class="mb-12 lg:mb-0">
-                            <h2 class="text-3xl md:text-4xl text-brand-900 mb-6 font-serif">El valor de la palabra</h2>
-                            <div class="w-20 h-1 bg-brand-700 mb-8"></div>
-                            <p class="text-muted-600 text-lg leading-relaxed mb-6">
-                                La psicoterapia no busca soluciones prefabricadas ni consejos directivos. Es un espacio íntimo donde tu historia singular es escuchada con absoluta atención y sin prejuicios.
-                            </p>
-                            <p class="text-muted-600 text-lg leading-relaxed">
-                                A través de la videollamada, creamos un encuadre terapéutico sólido, permitiéndote hablar desde la seguridad de tu propio entorno. El objetivo es desentrañar los nudos inconscientes que generan sufrimiento para dar paso a una vida más libre.
-                            </p>
+                <div class="max-w-7xl mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl text-center text-brand-900 mb-16 font-serif">¿Cómo funciona nuestro espacio?</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center">
+                            <i class="ph ph-video-camera text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">1. Sesiones Online</h3>
+                            <p class="text-muted-500 text-sm">Videollamadas seguras y encriptadas integradas en la plataforma. Sin descargar aplicaciones.</p>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <!-- Feature Cards -->
-                            <div class="bg-white p-8 rounded-xl border border-base-200 shadow-sm">
-                                <i class="ph ph-chat-centered-text text-3xl text-brand-700 mb-4"></i>
-                                <h3 class="text-xl font-serif text-brand-900 mb-2">Asociación Libre</h3>
-                                <p class="text-muted-500 text-sm leading-relaxed">Hable de aquello que le venga a la mente, sin filtros ni juicios previos.</p>
-                            </div>
-                            <div class="bg-white p-8 rounded-xl border border-base-200 shadow-sm">
-                                <i class="ph ph-lock-key text-3xl text-brand-700 mb-4"></i>
-                                <h3 class="text-xl font-serif text-brand-900 mb-2">Confidencialidad</h3>
-                                <p class="text-muted-500 text-sm leading-relaxed">Plataforma encriptada para garantizar el secreto profesional absoluto.</p>
-                            </div>
-                            <div class="bg-white p-8 rounded-xl border border-base-200 shadow-sm sm:col-span-2 flex items-start gap-6">
-                                <i class="ph ph-clock-counter-clockwise text-4xl text-brand-700 mt-1"></i>
-                                <div>
-                                    <h3 class="text-xl font-serif text-brand-900 mb-2">A tu propio ritmo</h3>
-                                    <p class="text-muted-500 text-sm leading-relaxed">El inconsciente no entiende de prisas. Respetamos el tiempo lógico de cada paciente en su proceso de elaboración y sanación profunda.</p>
-                                </div>
-                            </div>
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center">
+                            <i class="ph ph-calendar-plus text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">2. Autogestión</h3>
+                            <p class="text-muted-500 text-sm">Reserva, modifica o cancela tus citas desde tu panel personal de paciente 24/7.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center">
+                            <i class="ph ph-lock-key text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">3. Confidencialidad</h3>
+                            <p class="text-muted-500 text-sm">Tus datos y conversaciones están protegidos bajo estricto secreto profesional.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Footer -->
-            <footer class="bg-brand-900 border-t border-brand-800 py-12">
-                <div class="max-w-7xl mx-auto px-4 text-center text-brand-100/60 text-sm">
-                    <i class="ph ph-spiral text-3xl text-brand-500 mb-4 inline-block"></i>
-                    <p>&copy; 2026 El Dolape - Psicoanálisis Online. Un espacio de psicoanálisis.</p>
-                </div>
-            </footer>
         </section>
 
+        <!-- VISTA: REGISTRO / LOGIN -->
+        <section id="view-login" class="view-section hidden fade-in py-16 px-4">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-base-200">
+                <div class="text-center mb-8">
+                    <i class="ph ph-user-circle text-5xl text-brand-700 mb-2 inline-block"></i>
+                    <h2 class="text-2xl font-serif text-brand-900">Acceso de Pacientes</h2>
+                    <p class="text-muted-500 text-sm mt-1">Crea una cuenta para gestionar tus citas.</p>
+                </div>
+                
+                <!-- Simulador de Login para el prototipo -->
+                <form id="auth-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Nombre Completo</label>
+                        <input type="text" id="auth-name" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Correo Electrónico</label>
+                        <input type="email" id="auth-email" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Teléfono</label>
+                        <input type="tel" id="auth-phone" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-brand-800 text-white py-3 rounded-lg hover:bg-brand-900 font-medium mt-4">
+                        Registrarse / Iniciar Sesión
+                    </button>
+                    
+                    <p class="text-xs text-muted-400 text-center mt-4">
+                        En una versión conectada a Firebase, esto enviaría un correo de confirmación.
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <!-- VISTA: PANEL DE ADMINISTRACIÓN (CMS) -->
         <section id="view-admin" class="view-section hidden fade-in py-12 px-4 md:px-8 max-w-4xl mx-auto w-full flex-1">
             <header class="mb-10 border-b border-base-200 pb-6">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="w-10 h-10 rounded-lg bg-brand-800 flex items-center justify-center text-white">
-                        <i class="ph ph-gear text-2xl"></i>
-                    </div>
-                    <h1 class="text-3xl font-serif text-brand-900">Panel de Administración</h1>
-                </div>
-                <p class="text-muted-500">Gestor de Contenidos (CMS). Modifique los textos de su página web en tiempo real.</p>
+                <h1 class="text-3xl font-serif text-brand-900">Panel de Administración</h1>
+                <p class="text-muted-500">Gestor de Contenidos (CMS). Modifique los textos de su página web.</p>
             </header>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-base-200 overflow-hidden">
-                <div class="bg-base-100 px-6 py-4 border-b border-base-200">
-                    <h2 class="text-lg font-medium text-brand-900 flex items-center gap-2">
-                        <i class="ph ph-browser"></i> Editar Página de Inicio
-                    </h2>
-                </div>
-                <form id="cms-form" class="p-6 md:p-8 space-y-6">
-                    <div class="bg-blue-50 border border-blue-100 text-blue-800 text-sm p-4 rounded-lg flex items-start gap-3 mb-6">
-                        <i class="ph ph-info mt-0.5 text-xl"></i>
-                        <p>Los cambios guardados aquí actualizarán automáticamente la base de datos (Firestore) y se reflejarán instantáneamente en la página de inicio para todos los visitantes.</p>
-                    </div>
-
+            <div class="bg-white rounded-xl border border-base-200 p-6">
+                <form id="cms-form" class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-muted-800 mb-2">Título Principal (Hero Section)</label>
-                        <input type="text" id="admin-title" required class="w-full px-4 py-3 rounded-lg border border-base-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-brand-900 bg-base-50" placeholder="Ej: Encuentra la raíz de tu bienestar...">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-muted-800 mb-2">Texto Descriptivo (Hero Section)</label>
-                        <textarea id="admin-desc" rows="4" required class="w-full px-4 py-3 rounded-lg border border-base-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-brand-900 bg-base-50 resize-y" placeholder="Ej: El psicoanálisis te ofrece un viaje profundo..."></textarea>
-                    </div>
-
-                    <div class="pt-4 flex justify-end">
-                        <button type="submit" id="btn-save-cms" class="px-6 py-3 bg-brand-800 hover:bg-brand-900 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center gap-2">
-                            <i class="ph ph-floppy-disk"></i> Guardar Cambios
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <section id="view-dashboard" class="view-section hidden fade-in py-12 px-4 md:px-8 max-w-5xl mx-auto w-full flex-1">
-            <header class="mb-10 text-center md:text-left border-b border-base-200 pb-6">
-                <h1 class="text-3xl font-serif text-brand-900 mb-2">Mis Citas</h1>
-                <p class="text-muted-500">Gestione sus próximas sesiones de psicoanálisis.</p>
-            </header>
-
-            <!-- Status Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-base-200 flex items-center gap-5">
-                    <div class="w-14 h-14 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-3xl flex-shrink-0">
-                        <i class="ph ph-calendar-check"></i>
+                        <label class="block text-sm font-medium text-muted-800 mb-2">Título Principal de la Web</label>
+                        <input type="text" id="admin-title" value="Encuentra la raíz de tu bienestar emocional" required class="w-full px-4 py-2 rounded-lg border border-base-300">
                     </div>
                     <div>
-                        <h3 class="text-xs font-bold text-muted-400 uppercase tracking-widest">Próxima Sesión</h3>
-                        <p id="next-session-date" class="text-lg font-serif text-brand-900 mt-1">Cargando...</p>
+                        <label class="block text-sm font-medium text-muted-800 mb-2">Texto Descriptivo</label>
+                        <textarea id="admin-desc" rows="4" required class="w-full px-4 py-2 rounded-lg border border-base-300">La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento...</textarea>
                     </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-base-200 flex items-center gap-5">
-                    <div class="w-14 h-14 rounded-full bg-base-100 flex items-center justify-center text-muted-500 text-3xl flex-shrink-0">
-                        <i class="ph ph-fingerprint"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <h3 class="text-xs font-bold text-muted-400 uppercase tracking-widest">ID de Paciente</h3>
-                        <p id="user-id-display" class="text-sm font-mono text-muted-600 mt-1 truncate">Autenticando...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Appointments List -->
-            <div class="bg-white rounded-xl shadow-sm border border-base-200 overflow-hidden">
-                <div class="px-6 py-5 border-b border-base-200 bg-base-50 flex justify-between items-center">
-                    <h2 class="text-xl font-serif text-brand-900">Agenda Activa</h2>
-                    <button onclick="switchView('booking')" class="text-sm text-brand-700 hover:text-brand-900 font-medium flex items-center gap-1 bg-white px-3 py-1.5 rounded border border-base-200 shadow-sm transition-colors">
-                        <i class="ph ph-plus"></i> Agendar
+                    <button type="button" onclick="saveCMSContent()" class="px-6 py-2 bg-brand-800 text-white rounded hover:bg-brand-900">
+                        Guardar Textos
                     </button>
-                </div>
-                <div id="appointments-list" class="p-6 space-y-4">
-                    <div class="text-center p-8 text-muted-400">
-                        <i class="ph ph-spinner-gap animate-spin text-3xl mb-2 inline-block"></i>
-                        <p>Cargando información clínica...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-booking" class="view-section hidden fade-in py-12 px-4 md:px-8 max-w-2xl mx-auto w-full flex-1">
-            <header class="mb-10 text-center border-b border-base-200 pb-6">
-                <h1 class="text-3xl font-serif text-brand-900 mb-2">Reservar Sesión</h1>
-                <p class="text-muted-500">Seleccione el espacio adecuado para su encuentro.</p>
-            </header>
-
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-base-200">
-                <form id="booking-form" class="space-y-8">
-                    <div>
-                        <label class="block text-sm font-medium text-muted-800 mb-2">1. Seleccione la fecha</label>
-                        <input type="date" id="book-date" required class="w-full px-4 py-3 rounded-lg border border-base-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-brand-900 bg-base-50">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-muted-800 mb-2">2. Horarios disponibles</label>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3" id="time-slots">
-                            <!-- Injected by JS -->
-                        </div>
-                        <input type="hidden" id="book-time" required>
-                    </div>
-
-                    <div class="pt-2 border-t border-base-100">
-                        <button type="submit" id="btn-submit-booking" class="w-full bg-brand-800 hover:bg-brand-900 text-white font-medium text-lg py-4 rounded-xl transition-all shadow-md flex justify-center items-center gap-2">
-                            <span>Confirmar Reserva</span>
-                            <i class="ph ph-arrow-right font-bold"></i>
-                        </button>
-                    </div>
                 </form>
             </div>
         </section>
 
-        <section id="view-video" class="view-section hidden h-[calc(100vh-80px)] flex-col bg-muted-800">
-            <div class="bg-[#1c1917] text-base-200 px-6 py-3 border-b border-[#292524] flex justify-between items-center z-10 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></div>
-                    <div>
-                        <h2 class="font-medium text-sm">Consultorio Virtual</h2>
-                        <p class="text-[10px] text-muted-400 uppercase tracking-widest">Conexión Encriptada</p>
-                    </div>
-                </div>
-                <button onclick="switchView('dashboard')" class="px-4 py-2 bg-[#292524] hover:bg-brand-900 border border-[#44403c] rounded text-sm transition-colors flex items-center gap-2">
-                    <i class="ph ph-sign-out"></i> Finalizar
+        <!-- VISTA: MIS CITAS (DASHBOARD) -->
+        <section id="view-dashboard" class="view-section hidden fade-in py-12 px-4 max-w-4xl mx-auto w-full">
+            <header class="mb-8 border-b border-base-200 pb-4 flex justify-between items-center">
+                <h1 class="text-2xl font-serif text-brand-900">Mis Citas</h1>
+                <button onclick="switchView('booking')" class="bg-brand-100 text-brand-800 px-4 py-2 rounded hover:bg-brand-200">
+                    + Nueva Cita
                 </button>
-            </div>
-            
-            <div id="jitsi-container" class="flex-1 w-full bg-[#0c0a09] relative">
-                <div id="jitsi-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-muted-500">
-                    <i class="ph ph-video-camera-slash text-5xl mb-4 opacity-40"></i>
-                    <p class="text-lg font-serif">El consultorio se abrirá en breve.</p>
+            </header>
+            <div id="appointments-list" class="space-y-4">
+                <div class="bg-white p-6 rounded-xl border border-base-200 text-center text-muted-500">
+                    No tienes citas programadas actualmente.
                 </div>
             </div>
         </section>
 
-        <div id="toast-message" class="fixed bottom-6 right-6 bg-brand-900 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 pointer-events-none border border-brand-700">
-            <i class="ph ph-info text-2xl text-brand-300" id="toast-icon"></i>
-            <span id="toast-text" class="font-medium text-sm">Notificación</span>
-        </div>
+        <!-- VISTA: RESERVAR -->
+        <section id="view-booking" class="view-section hidden fade-in py-12 px-4 max-w-2xl mx-auto w-full">
+            <h1 class="text-2xl font-serif text-brand-900 mb-6 text-center">Reservar Sesión</h1>
+            <div class="bg-white p-6 rounded-xl border border-base-200">
+                <form id="booking-form" class="space-y-6">
+                    <div>
+                        <label class="block mb-2 text-sm">Selecciona una fecha:</label>
+                        <input type="date" id="book-date" required class="w-full p-3 border border-base-300 rounded">
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm">Selecciona una hora:</label>
+                        <select id="book-time" required class="w-full p-3 border border-base-300 rounded bg-white">
+                            <option value="">Elegir hora...</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="16:00">16:00 PM</option>
+                            <option value="18:00">18:00 PM</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-800 text-white py-3 rounded hover:bg-brand-900 font-medium">
+                        Confirmar Reserva
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- VISTA: VIDEOLLAMADA (JITSI) -->
+        <section id="view-video" class="view-section hidden h-[calc(100vh-80px)] flex-col bg-gray-900">
+            <div class="p-2 bg-black text-white text-right">
+                <button onclick="switchView('dashboard')" class="text-sm px-3 py-1 bg-red-600 rounded">Salir de la sesión</button>
+            </div>
+            <div id="jitsi-container" class="flex-1 w-full relative">
+                <div id="jitsi-placeholder" class="absolute inset-0 flex items-center justify-center text-white">
+                    Preparando consultorio virtual...
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        /* 
+        ========================================================================
+        CONFIGURACIÓN DE FIREBASE
+        Para que guarde datos reales, pega aquí la configuración de tu proyecto.
+        ========================================================================
+        */
+        const firebaseConfig = {
+            // apiKey: "TU_API_KEY",
+            // authDomain: "TU_DOMINIO.firebaseapp.com",
+            // projectId: "TU_PROJECT_ID",
+            // storageBucket: "TU_BUCKET.appspot.com",
+            // messagingSenderId: "TU_SENDER",
+            // appId: "TU_APP_ID"
+        };
+        // =====================================================================
 
-        // Application State
-        let currentUser = null;
-        let db = null;
-        let appointments = [];
+        // Variables de estado (Simulación sin base de datos)
+        let isUserLoggedIn = false;
+        let userName = "";
+        let mockAppointments = [];
         let jitsiApi = null;
-        let unsubscribeCMS = null;
-        let unsubscribeAppts = null;
 
-        // Constants & Config
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'psycho-clinic-app-001';
-        let firebaseConfig = null;
-        
-        try {
-            if (typeof __firebase_config !== 'undefined') {
-                firebaseConfig = JSON.parse(__firebase_config);
-            }
-        } catch (e) {
-            console.warn("Utilizando entorno local.", e);
-        }
-
-        const app = firebaseConfig ? initializeApp(firebaseConfig) : null;
-        db = app ? getFirestore(app) : null;
-        const auth = app ? getAuth(app) : null;
-
-        window.switchView = function(viewId) {
+        // Navegación
+        function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => {
-                el.classList.add('hidden'); el.classList.remove('block');
+                el.classList.add('hidden'); el.classList.remove('block', 'flex');
             });
             
             const target = document.getElementById(`view-${viewId}`);
             if(target) {
                 target.classList.remove('hidden');
-                if(viewId === 'video') target.classList.add('flex');
-                else target.classList.add('block');
+                target.classList.add(viewId === 'video' ? 'flex' : 'block');
             }
-            
-            // Navigation active state styling
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.id !== 'nav-video') {
-                    btn.classList.remove('bg-brand-50', 'text-brand-800');
-                    btn.classList.add('text-muted-600');
-                }
-            });
-            
-            const activeBtn = document.getElementById(`nav-${viewId}`);
-            if(activeBtn && viewId !== 'video') {
-                activeBtn.classList.remove('text-muted-600');
-                activeBtn.classList.add('bg-brand-50', 'text-brand-800');
-            }
-
             window.scrollTo(0,0);
 
-            // Toggle Jitsi
             if(viewId === 'video') initJitsi();
             else disposeJitsi();
-        };
+        }
 
-        window.toggleMobileMenu = function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-            menu.classList.toggle('flex');
-        };
-
-        window.showToast = function(msg, type = 'success') {
-            const toast = document.getElementById('toast-message');
-            document.getElementById('toast-text').innerText = msg;
-            const icon = document.getElementById('toast-icon');
+        // Lógica de Autenticación simulada
+        document.getElementById('auth-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            userName = document.getElementById('auth-name').value;
+            isUserLoggedIn = true;
             
-            icon.className = type === 'success' 
-                ? 'ph ph-check-circle text-2xl text-brand-300' 
-                : 'ph ph-warning-circle text-2xl text-red-400';
+            // Actualizar menú
+            document.getElementById('btn-login-nav').classList.add('hidden');
+            document.getElementById('btn-logout-nav').classList.remove('hidden');
+            document.getElementById('nav-dashboard').classList.remove('hidden');
+            document.getElementById('nav-booking').classList.remove('hidden');
             
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 4000);
-        };
+            alert(`Bienvenido/a ${userName}. Sesión iniciada correctamente.`);
+            switchView('dashboard');
+        });
 
+        function logoutUser() {
+            isUserLoggedIn = false;
+            document.getElementById('btn-login-nav').classList.remove('hidden');
+            document.getElementById('btn-logout-nav').classList.add('hidden');
+            document.getElementById('nav-dashboard').classList.add('hidden');
+            document.getElementById('nav-booking').classList.add('hidden');
+            switchView('home');
+        }
+
+        function checkAuthAndBook() {
+            if(isUserLoggedIn) switchView('booking');
+            else switchView('login');
+        }
+
+        // Lógica del CMS (Simulada para cambiar textos temporalmente)
+        function saveCMSContent() {
+            const title = document.getElementById('admin-title').value;
+            const desc = document.getElementById('admin-desc').value;
+            document.getElementById('hero-title').innerText = title;
+            document.getElementById('hero-desc').innerText = desc;
+            alert('Textos actualizados (Se perderán al recargar la página hasta que conectes Firebase)');
+            switchView('home');
+        }
+
+        // Lógica de Reservas (Simulada)
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+            
+            mockAppointments.push({ date, time });
+            renderAppointments();
+            
+            alert("Reserva confirmada. Aquí se enviaría un email automático.");
+            document.getElementById('booking-form').reset();
+            switchView('dashboard');
+        });
+
+        function renderAppointments() {
+            const list = document.getElementById('appointments-list');
+            if(mockAppointments.length === 0) {
+                list.innerHTML = '<div class="bg-white p-6 rounded-xl border border-base-200 text-center">No tienes citas.</div>';
+                return;
+            }
+            
+            list.innerHTML = '';
+            mockAppointments.forEach((appt, index) => {
+                list.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border border-base-200 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold">Día: ${appt.date}</p>
+                            <p class="text-sm text-gray-500">Hora: ${appt.time}</p>
+                        </div>
+                        <button onclick="switchView('video')" class="bg-brand-700 text-white px-4 py-2 rounded flex items-center gap-2">
+                            <i class="ph ph-video-camera"></i> Entrar a sesión
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // Videollamada (Jitsi)
         function initJitsi() {
-            if(jitsiApi) return; 
-            const domain = 'meet.jit.si';
-            const roomName = `Consultorio_${appId}_${currentUser?.uid || 'Anon'}`;
-            
+            if(jitsiApi) return;
             document.getElementById('jitsi-placeholder').classList.add('hidden');
-            
-            jitsiApi = new JitsiMeetExternalAPI(domain, {
-                roomName: roomName,
+            jitsiApi = new JitsiMeetExternalAPI('meet.jit.si', {
+                roomName: 'ConsultorioSereno_' + Math.random().toString(36).substring(7),
                 width: '100%',
                 height: '100%',
                 parentNode: document.getElementById('jitsi-container'),
-                lang: 'es',
-                interfaceConfigOverwrite: {
-                    DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
-                    SHOW_JITSI_WATERMARK: false,
-                    TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'hangup', 'chat', 'settings']
-                },
-                configOverwrite: { disableDeepLinking: true }
+                lang: 'es'
             });
         }
 
@@ -460,238 +420,6 @@
                 document.getElementById('jitsi-placeholder').classList.remove('hidden');
             }
         }
-
-        const dateInput = document.getElementById('book-date');
-        dateInput.min = new Date().toISOString().split('T')[0];
-        const timeSlotsContainer = document.getElementById('time-slots');
-        const hiddenTimeInput = document.getElementById('book-time');
-        
-        function renderTimeSlots() {
-            const slots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00', '18:00', '19:00'];
-            timeSlotsContainer.innerHTML = '';
-            slots.forEach(time => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'py-3 rounded-lg border border-base-300 text-muted-600 font-medium hover:border-brand-500 hover:text-brand-700 transition-all focus:outline-none slot-btn bg-white text-sm';
-                btn.innerText = time;
-                btn.onclick = () => {
-                    document.querySelectorAll('.slot-btn').forEach(b => {
-                        b.classList.remove('bg-brand-50', 'border-brand-500', 'text-brand-800', 'ring-2', 'ring-brand-200');
-                    });
-                    btn.classList.add('bg-brand-50', 'border-brand-500', 'text-brand-800', 'ring-2', 'ring-brand-200');
-                    hiddenTimeInput.value = time;
-                };
-                timeSlotsContainer.appendChild(btn);
-            });
-        }
-        renderTimeSlots();
-
-        async function initAuth() {
-            if (!auth) return;
-            try {
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
-                currentUser = auth.currentUser;
-                const idEl = document.getElementById('user-id-display');
-                if(idEl) idEl.innerText = currentUser.uid;
-                
-                // Initialize Listeners AFTER auth
-                setupCMSListener();
-                setupAppointmentsListener();
-                
-            } catch (error) {
-                console.error("Auth Error:", error);
-                showToast("Error de conexión al sistema.", "error");
-            }
-        }
-
-        // CMS Logic: Read & Write Public Content
-        function getCMSPath() {
-            // Rule 1 Strict Path Check: /artifacts/{appId}/public/data/content
-            return doc(db, 'artifacts', appId, 'public', 'data', 'content', 'landing');
-        }
-
-        function setupCMSListener() {
-            if(!db || !currentUser) return;
-            
-            // Listen to changes in the CMS document
-            unsubscribeCMS = onSnapshot(getCMSPath(), (docSnap) => {
-                const titleEl = document.getElementById('hero-title');
-                const descEl = document.getElementById('hero-desc');
-                
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    // Update Landing Page UI
-                    const titleText = data.title || 'Encuentra la raíz de tu bienestar emocional';
-                    const descText = data.description || 'La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento. No solo tratamos el síntoma, exploramos tu historia para sanar desde el origen, todo desde la comodidad de tu hogar.';
-                    
-                    titleEl.innerText = titleText;
-                    descEl.innerText = descText;
-                    
-                    // Update Admin Inputs
-                    document.getElementById('admin-title').value = titleText;
-                    document.getElementById('admin-desc').value = descText;
-                } else {
-                    // Default values if doc doesn't exist yet
-                    titleEl.innerText = 'Encuentra la raíz de tu bienestar emocional';
-                    descEl.innerText = 'La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento...';
-                }
-            }, (error) => {
-                console.error("CMS Listener Error:", error);
-            });
-        }
-
-        // CMS Submit Event
-        document.getElementById('cms-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if(!db || !currentUser) return;
-            
-            const btn = document.getElementById('btn-save-cms');
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Guardando...';
-            btn.disabled = true;
-            
-            try {
-                const newTitle = document.getElementById('admin-title').value;
-                const newDesc = document.getElementById('admin-desc').value;
-                
-                // Save to Firestore (merge: true updates existing, creates if missing)
-                await setDoc(getCMSPath(), {
-                    title: newTitle,
-                    description: newDesc,
-                    updatedAt: new Date().toISOString(),
-                    updatedBy: currentUser.uid
-                }, { merge: true });
-                
-                showToast('Contenidos de la página actualizados correctamente');
-            } catch (error) {
-                console.error("CMS Save Error:", error);
-                showToast("Error al guardar los cambios", "error");
-            } finally {
-                btn.innerHTML = '<i class="ph ph-floppy-disk"></i> Guardar Cambios';
-                btn.disabled = false;
-            }
-        });
-
-        function getAppointmentsPath() {
-            // Rule 1 Strict Path Check: /artifacts/{appId}/users/{userId}/appointments
-            return collection(db, 'artifacts', appId, 'users', currentUser.uid, 'appointments');
-        }
-
-        function setupAppointmentsListener() {
-            if (!currentUser || !db) return;
-            // Rule 2 Check: No complex queries, fetch all and filter in JS
-            unsubscribeAppts = onSnapshot(getAppointmentsPath(), (snapshot) => {
-                appointments = [];
-                snapshot.forEach(doc => appointments.push({ id: doc.id, ...doc.data() }));
-                renderAppointments();
-            }, (error) => console.error("Appointments Error:", error));
-        }
-
-        window.cancelAppointment = async function(docId) {
-            if(!currentUser || !db) return;
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'appointments', docId));
-                showToast("Sesión cancelada");
-            } catch (e) {
-                showToast("No se pudo cancelar", "error");
-            }
-        }
-
-        function renderAppointments() {
-            const listEl = document.getElementById('appointments-list');
-            const nextSessionEl = document.getElementById('next-session-date');
-            listEl.innerHTML = '';
-            
-            const now = new Date();
-            const futureAppts = appointments
-                .filter(a => new Date(`${a.date}T${a.time}`) >= now)
-                .sort((a, b) => new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`));
-
-            if (futureAppts.length === 0) {
-                nextSessionEl.innerText = "Ninguna programada";
-                listEl.innerHTML = `
-                    <div class="p-8 text-center flex flex-col items-center">
-                        <div class="w-16 h-16 bg-base-100 rounded-full flex items-center justify-center text-muted-300 text-3xl mb-4">
-                            <i class="ph ph-calendar-blank"></i>
-                        </div>
-                        <h3 class="text-lg font-medium text-brand-900 mb-1">Sin sesiones pendientes</h3>
-                        <p class="text-muted-500 mb-5 text-sm max-w-sm">Tómese su tiempo. Cuando esté listo, puede agendar un nuevo encuentro.</p>
-                        <button onclick="switchView('booking')" class="px-5 py-2 bg-white border border-base-200 shadow-sm text-brand-800 rounded font-medium hover:bg-base-50 transition-colors text-sm">Agendar Sesión</button>
-                    </div>`;
-                return;
-            }
-
-            const next = futureAppts[0];
-            nextSessionEl.innerText = new Date(`${next.date}T${next.time}`).toLocaleDateString('es-ES', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' hrs';
-
-            futureAppts.forEach(appt => {
-                const dateObj = new Date(`${appt.date}T${appt.time}`);
-                
-                const item = document.createElement('div');
-                item.className = 'bg-white p-4 sm:p-5 rounded-xl border border-base-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-brand-200';
-                item.innerHTML = `
-                    <div class="flex items-start gap-4">
-                        <div class="w-14 h-14 rounded-lg bg-base-50 flex flex-col items-center justify-center text-brand-800 flex-shrink-0 border border-base-200">
-                            <span class="text-[10px] font-bold uppercase tracking-wider">${dateObj.toLocaleDateString('es-ES', { month: 'short'})}</span>
-                            <span class="text-xl font-serif leading-none mt-0.5">${dateObj.getDate()}</span>
-                        </div>
-                        <div>
-                            <h4 class="font-serif font-medium text-brand-900 capitalize">${dateObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>
-                            <p class="text-sm text-muted-500 flex items-center gap-1 mt-1">
-                                <i class="ph ph-clock text-brand-600"></i> ${appt.time} hrs
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-2 sm:ml-auto w-full sm:w-auto">
-                        <button onclick="switchView('video')" class="px-4 py-2 bg-brand-800 text-white hover:bg-brand-900 rounded text-sm font-medium transition-colors flex justify-center items-center gap-2">
-                            <i class="ph ph-video-camera"></i> Ingresar
-                        </button>
-                        <button onclick="cancelAppointment('${appt.id}')" class="px-4 py-2 bg-white border border-base-200 text-muted-600 hover:text-red-600 hover:border-red-200 hover:bg-red-50 rounded text-sm font-medium transition-colors">
-                            Cancelar
-                        </button>
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
-        }
-
-        document.getElementById('booking-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if(!currentUser) return showToast("Conectando, intente de nuevo...", "error");
-
-            const date = document.getElementById('book-date').value;
-            const time = document.getElementById('book-time').value;
-
-            if(!time) return showToast("Seleccione un horario.", "error");
-
-            const btn = document.getElementById('btn-submit-booking');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Procesando...';
-
-            try {
-                await addDoc(getAppointmentsPath(), { date, time, createdAt: new Date().toISOString() });
-                showToast("Encuentro programado con éxito.");
-                document.getElementById('booking-form').reset();
-                document.getElementById('book-time').value = '';
-                renderTimeSlots(); 
-                setTimeout(() => switchView('dashboard'), 1200);
-            } catch (error) {
-                showToast("Error al reservar.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>Confirmar Reserva</span><i class="ph ph-arrow-right font-bold"></i>';
-            }
-        });
-
-        // Initialize Application
-        if (app) initAuth();
-        else showToast("Modo sin conexión. Datos no se guardarán.", "error");
-
     </script>
 </body>
 </html>
