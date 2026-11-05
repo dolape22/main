@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Sereno - Psicoterapia Online</title>
+    
+    <!-- Scripts & Fuentes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://meet.jit.si/external_api.js"></script>
+    
+    <!-- Configuración de Colores y Tipografía -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            900: '#134e4a', /* Verde oscuro profundo */
+                            800: '#115e59',
+                            700: '#0f766e',
+                            600: '#0d9488',
+                            500: '#14b8a6', /* Verde claro */
+                            50: '#f0fdfa',
+                        },
+                        base: {
+                            50: '#fafaf9',  /* Fondo crema/beige claro */
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                        },
+                        muted: {
+                            400: '#a8a29e',
+                            500: '#78716c', /* Grises cálidos para textos */
+                            600: '#57534e',
+                            800: '#292524',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #fafaf9; 
+            color: #292524;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Merriweather', serif;
+        }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-pattern {
+            background-color: #f5f5f4;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d6d3d1' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Ocultar vistas por defecto */
+        .view-section { display: none; }
+        .view-active { display: block; }
+        .view-flex-active { display: flex; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-base-50/90 backdrop-blur-md border-b border-base-200 sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer" onclick="switchView('home')">
+                    <i class="ph ph-spiral text-4xl text-brand-700 mr-3"></i>
+                    <div>
+                        <span class="block text-xl font-serif text-brand-900 leading-none tracking-wide">Clínica Sereno</span>
+                        <span class="block text-[10px] text-muted-500 uppercase tracking-widest mt-1">Psicoterapia Online</span>
+                    </div>
+                </div>
+
+                <!-- Menú Escritorio -->
+                <div class="hidden md:flex items-center space-x-2">
+                    <button onclick="switchView('home')" class="px-4 py-2 rounded-lg text-brand-800 font-medium hover:bg-brand-50 transition-colors">Inicio</button>
+                    <button onclick="switchView('dashboard')" id="nav-dashboard" class="hidden px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors">Mis Citas</button>
+                    <button onclick="switchView('booking')" id="nav-booking" class="hidden px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors">Reservar Sesión</button>
+                    <button onclick="switchView('admin')" class="px-4 py-2 rounded-lg text-muted-600 hover:text-brand-800 hover:bg-base-100 transition-colors flex items-center gap-1">
+                        <i class="ph ph-gear"></i> Admin (CMS)
+                    </button>
+                    
+                    <div class="w-px h-6 bg-base-300 mx-2"></div>
+                    
+                    <!-- Botones de Acceso -->
+                    <button onclick="switchView('login')" id="btn-login-nav" class="ml-2 px-5 py-2.5 rounded-lg border border-brand-800 text-brand-800 hover:bg-brand-50 transition-colors font-medium">
+                        Acceso Pacientes
+                    </button>
+                    <button onclick="logoutUser()" id="btn-logout-nav" class="hidden ml-2 px-5 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-colors font-medium">
+                        Cerrar Sesión
+                    </button>
+                </div>
+                
+                <!-- Menú Móvil (Hamburguesa simple) -->
+                <div class="flex items-center md:hidden">
+                    <button onclick="switchView('login')" class="text-brand-800 p-2">
+                        <i class="ph ph-user-circle text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal de Vistas -->
+    <main class="flex-1 relative flex flex-col w-full">
+        
+        <!-- VISTA: INICIO -->
+        <section id="view-home" class="view-section view-active flex-1 fade-in">
+            <!-- Portada (Hero) -->
+            <div class="relative overflow-hidden bg-base-100 pt-16 pb-24 md:pt-20 md:pb-28 border-b border-base-200">
+                <div class="absolute inset-0 hero-pattern z-0 opacity-60"></div>
+                <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <span class="inline-block py-1 px-4 rounded-full border border-brand-700/30 text-brand-800 text-sm font-medium tracking-widest uppercase mb-6 bg-base-50/50 backdrop-blur-sm">Espacio de Escucha</span>
+                            
+                            <!-- Textos del CMS (Editables desde Admin) -->
+                            <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-5xl text-brand-900 mb-6 leading-tight font-serif">
+                                Encuentra la raíz de tu bienestar emocional
+                            </h1>
+                            <p id="hero-desc" class="text-lg text-muted-600 mb-8 leading-relaxed">
+                                La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento. No solo tratamos el síntoma, exploramos tu historia para sanar desde el origen, todo desde la comodidad de tu hogar.
+                            </p>
+                            
+                            <button onclick="checkAuthAndBook()" class="px-8 py-4 text-lg bg-brand-800 text-base-50 rounded-lg hover:bg-brand-900 shadow-lg shadow-brand-900/20 transition-all font-medium">
+                                Solicitar Primera Cita
+                            </button>
+                        </div>
+
+                        <!-- Imagen Decorativa -->
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-brand-500 rounded-2xl transform translate-x-4 translate-y-4 opacity-20"></div>
+                            <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Psicoterapia Online" class="relative z-10 rounded-2xl shadow-xl border-4 border-white w-full object-cover h-[400px]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Información -->
+            <div class="py-24 bg-base-50">
+                <div class="max-w-7xl mx-auto px-4">
+                    <h2 class="text-3xl md:text-4xl text-center text-brand-900 mb-16 font-serif">¿Cómo funciona nuestro espacio?</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center shadow-sm">
+                            <i class="ph ph-video-camera text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">1. Sesiones Online</h3>
+                            <p class="text-muted-500 text-sm">Videollamadas seguras y encriptadas integradas en la plataforma. Sin descargar aplicaciones externas.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center shadow-sm">
+                            <i class="ph ph-calendar-plus text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">2. Autogestión</h3>
+                            <p class="text-muted-500 text-sm">Reserva, modifica o revisa tus citas desde tu panel personal de paciente de forma rápida y sencilla.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl border border-base-200 text-center shadow-sm">
+                            <i class="ph ph-lock-key text-4xl text-brand-700 mb-4 inline-block"></i>
+                            <h3 class="text-xl font-serif text-brand-900 mb-2">3. Confidencialidad</h3>
+                            <p class="text-muted-500 text-sm">Tus datos, historial y conversaciones están estrictamente protegidos bajo secreto profesional.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: REGISTRO / LOGIN -->
+        <section id="view-login" class="view-section fade-in py-16 px-4">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-base-200">
+                <div class="text-center mb-8">
+                    <i class="ph ph-user-circle text-5xl text-brand-700 mb-2 inline-block"></i>
+                    <h2 class="text-2xl font-serif text-brand-900">Acceso de Pacientes</h2>
+                    <p class="text-muted-500 text-sm mt-1">Crea una cuenta o inicia sesión para gestionar tus citas.</p>
+                </div>
+                
+                <form id="auth-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Nombre Completo</label>
+                        <input type="text" id="auth-name" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Correo Electrónico</label>
+                        <input type="email" id="auth-email" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-muted-800 mb-1">Teléfono</label>
+                        <input type="tel" id="auth-phone" required class="w-full px-4 py-2 rounded-lg border border-base-300 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-brand-800 text-white py-3 rounded-lg hover:bg-brand-900 font-medium mt-4 shadow-md transition-colors">
+                        Ingresar a mi portal
+                    </button>
+                    
+                    <div class="mt-4 p-3 bg-brand-50 text-brand-800 text-xs rounded border border-brand-100 flex gap-2">
+                        <i class="ph ph-info mt-0.5"></i>
+                        <p>Simulador activado: Puedes ingresar cualquier dato para probar la plataforma. Las claves de Firebase se añadirán posteriormente.</p>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- VISTA: PANEL DE ADMINISTRACIÓN (CMS) -->
+        <section id="view-admin" class="view-section fade-in py-12 px-4 md:px-8 max-w-4xl mx-auto w-full flex-1">
+            <header class="mb-8 border-b border-base-200 pb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-serif text-brand-900">Panel de Administración</h1>
+                    <p class="text-muted-500">Gestor de Contenidos (CMS). Modifica tu web sin programar.</p>
+                </div>
+                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded border border-red-200 font-medium">Área Protegida</span>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Gestor de Textos -->
+                <div class="bg-white rounded-xl border border-base-200 p-6 shadow-sm">
+                    <h2 class="text-xl font-serif text-brand-900 mb-4 flex items-center gap-2"><i class="ph ph-text-aa"></i> Textos de Inicio</h2>
+                    <form id="cms-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-muted-800 mb-1">Título Principal</label>
+                            <input type="text" id="admin-title" value="Encuentra la raíz de tu bienestar emocional" required class="w-full px-4 py-2 rounded-lg border border-base-300 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-muted-800 mb-1">Descripción</label>
+                            <textarea id="admin-desc" rows="4" required class="w-full px-4 py-2 rounded-lg border border-base-300 text-sm">La psicoterapia te ofrece un viaje profundo hacia el autoconocimiento. No solo tratamos el síntoma, exploramos tu historia para sanar desde el origen, todo desde la comodidad de tu hogar.</textarea>
+                        </div>
+                        <button type="button" onclick="saveCMSContent()" class="w-full py-2 bg-brand-800 text-white rounded-lg hover:bg-brand-900 text-sm font-medium">
+                            Guardar Cambios
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Visor de Citas Globales -->
+                <div class="bg-white rounded-xl border border-base-200 p-6 shadow-sm">
+                    <h2 class="text-xl font-serif text-brand-900 mb-4 flex items-center gap-2"><i class="ph ph-calendar-check"></i> Próximas Citas (Global)</h2>
+                    <div id="admin-appointments-list" class="space-y-3">
+                        <p class="text-sm text-muted-500 italic">No hay citas registradas aún.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA: MIS CITAS (DASHBOARD PACIENTE) -->
+        <section id="view-dashboard" class="view-section fade-in py-12 px-4 max-w-4xl mx-auto w-full">
+            <header class="mb-8 border-b border-base-200 pb-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-serif text-brand-900">Hola, <span id="display-user-name">Paciente</span></h1>
+                    <p class="text-muted-500 text-sm">Bienvenido/a a tu portal de psicoterapia.</p>
+                </div>
+                <button onclick="switchView('booking')" class="bg-brand-100 text-brand-800 px-4 py-2 rounded-lg hover:bg-brand-200 font-medium transition-colors border border-brand-200 shadow-sm flex items-center gap-2">
+                    <i class="ph ph-plus"></i> Nueva Cita
+                </button>
+            </header>
+            
+            <h2 class="text-lg font-medium text-brand-900 mb-4">Tus próximas sesiones</h2>
+            <div id="appointments-list" class="space-y-4">
+                <!-- Se rellena por JS -->
+            </div>
+        </section>
+
+        <!-- VISTA: RESERVAR -->
+        <section id="view-booking" class="view-section fade-in py-12 px-4 max-w-xl mx-auto w-full">
+            <button onclick="switchView('dashboard')" class="text-brand-700 hover:text-brand-900 mb-4 flex items-center gap-1 text-sm font-medium">
+                <i class="ph ph-arrow-left"></i> Volver a mis citas
+            </button>
+            
+            <h1 class="text-3xl font-serif text-brand-900 mb-2">Agendar Sesión</h1>
+            <p class="text-muted-500 mb-8">Selecciona la fecha y hora que mejor se adapte a ti. Las sesiones tienen una duración de 50 minutos.</p>
+            
+            <div class="bg-white p-6 md:p-8 rounded-2xl border border-base-200 shadow-sm">
+                <form id="booking-form" class="space-y-6">
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-muted-800">Fecha de la sesión</label>
+                        <div class="relative">
+                            <i class="ph ph-calendar-blank absolute left-3 top-3 text-muted-400 text-lg"></i>
+                            <input type="date" id="book-date" required class="w-full pl-10 pr-4 py-3 border border-base-300 rounded-lg focus:ring-brand-500 focus:border-brand-500 outline-none text-muted-800">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-muted-800">Horario disponible</label>
+                        <div class="relative">
+                            <i class="ph ph-clock absolute left-3 top-3 text-muted-400 text-lg"></i>
+                            <select id="book-time" required class="w-full pl-10 pr-4 py-3 border border-base-300 rounded-lg focus:ring-brand-500 focus:border-brand-500 outline-none text-muted-800 bg-white appearance-none">
+                                <option value="" disabled selected>Selecciona una hora...</option>
+                                <option value="09:00">09:00 AM (Mañana)</option>
+                                <option value="11:00">11:00 AM (Mañana)</option>
+                                <option value="16:00">16:00 PM (Tarde)</option>
+                                <option value="18:00">18:00 PM (Tarde)</option>
+                                <option value="20:00">20:00 PM (Noche)</option>
+                            </select>
+                            <i class="ph ph-caret-down absolute right-4 top-3.5 text-muted-400"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-brand-800 text-white py-3.5 rounded-lg hover:bg-brand-900 font-medium shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="ph ph-check-circle text-lg"></i> Confirmar Reserva
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- VISTA: VIDEOLLAMADA (JITSI) -->
+        <section id="view-video" class="view-section h-[calc(100vh-80px)] flex-col bg-gray-900">
+            <div class="p-3 bg-black flex justify-between items-center px-6 border-b border-gray-800">
+                <div class="text-white flex items-center gap-2">
+                    <i class="ph ph-shield-check text-brand-500 text-xl"></i>
+                    <span class="text-sm font-medium">Conexión Segura de Psicoterapia</span>
+                </div>
+                <button onclick="switchView('dashboard')" class="text-sm px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors flex items-center gap-1">
+                    <i class="ph ph-phone-disconnect"></i> Finalizar Sesión
+                </button>
+            </div>
+            <div id="jitsi-container" class="flex-1 w-full relative">
+                <div id="jitsi-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-white">
+                    <i class="ph ph-spinner-gap animate-spin text-4xl mb-4 text-brand-500"></i>
+                    <p class="font-medium text-lg">Preparando tu consultorio virtual...</p>
+                    <p class="text-gray-400 text-sm mt-1">Conectando cámara y micrófono</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* 
+        ========================================================================
+        CONFIGURACIÓN DE FIREBASE (PREPARADO PARA EL FUTURO)
+        Cuando desees conectar una base de datos real, descomenta este código
+        e introduce las claves de tu proyecto de Firebase.
+        ========================================================================
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_DOMINIO.firebaseapp.com",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_BUCKET.appspot.com",
+            messagingSenderId: "TU_SENDER",
+            appId: "TU_APP_ID"
+        };
+        
+        // const app = initializeApp(firebaseConfig);
+        // const db = getFirestore(app);
+        
+        ========================================================================
+        */
+
+        // ESTADO DE LA APLICACIÓN (Simulación In-Memory para que funcione sin backend por ahora)
+        let isUserLoggedIn = false;
+        let currentUser = { name: "", email: "", phone: "" };
+        let mockAppointments = []; 
+        let jitsiApi = null;
+        
+        // Cargar fecha mínima en el calendario (hoy)
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('book-date').setAttribute('min', today);
+        });
+
+        // 1. SISTEMA DE NAVEGACIÓN Y VISTAS
+        function switchView(viewId) {
+            // Ocultar todas
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('view-active', 'view-flex-active');
+            });
+            
+            // Mostrar destino
+            const target = document.getElementById(`view-${viewId}`);
+            if(target) {
+                if(viewId === 'video') {
+                    target.classList.add('view-flex-active');
+                    initJitsi();
+                } else {
+                    target.classList.add('view-active');
+                    disposeJitsi(); // Apagar cámara si salimos
+                }
+            }
+            window.scrollTo(0,0);
+        }
+
+        // 2. SISTEMA DE AUTENTICACIÓN (LOGIN/REGISTRO)
+        document.getElementById('auth-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Recoger datos
+            currentUser.name = document.getElementById('auth-name').value;
+            currentUser.email = document.getElementById('auth-email').value;
+            currentUser.phone = document.getElementById('auth-phone').value;
+            isUserLoggedIn = true;
+            
+            // Actualizar interfaz (mostrar botones ocultos)
+            document.getElementById('btn-login-nav').classList.add('hidden');
+            document.getElementById('btn-logout-nav').classList.remove('hidden');
+            document.getElementById('nav-dashboard').classList.remove('hidden');
+            document.getElementById('nav-booking').classList.remove('hidden');
+            
+            // Poner nombre en el dashboard
+            document.getElementById('display-user-name').innerText = currentUser.name;
+            
+            // Crear una pequeña notificación visual (simulando alert)
+            showNotification(`¡Bienvenido/a ${currentUser.name}! Has iniciado sesión correctamente.`);
+            
+            // Ir al panel de paciente
+            switchView('dashboard');
+            renderAppointments();
+        });
+
+        function logoutUser() {
+            isUserLoggedIn = false;
+            currentUser = { name: "", email: "", phone: "" };
+            
+            document.getElementById('btn-login-nav').classList.remove('hidden');
+            document.getElementById('btn-logout-nav').classList.add('hidden');
+            document.getElementById('nav-dashboard').classList.add('hidden');
+            document.getElementById('nav-booking').classList.add('hidden');
+            
+            showNotification("Has cerrado sesión. Hasta pronto.");
+            switchView('home');
+        }
+
+        // Interceptar clic en "Solicitar cita" desde Home
+        function checkAuthAndBook() {
+            if(isUserLoggedIn) {
+                switchView('booking');
+            } else {
+                showNotification("Por favor, inicia sesión o regístrate para poder reservar una cita.");
+                switchView('login');
+            }
+        }
+
+        // 3. SISTEMA DE RESERVAS
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const date = document.getElementById('book-date').value;
+            const time = document.getElementById('book-time').value;
+            
+            // Formatear fecha para leerla mejor (ej: 2023-10-25 -> 25/10/2023)
+            const dateObj = new Date(date);
+            const formattedDate = dateObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const newAppointment = {
+                id: Math.random().toString(36).substr(2, 9),
+                patientName: currentUser.name,
+                patientEmail: currentUser.email,
+                rawDate: date,
+                displayDate: formattedDate,
+                time: time
+            };
+
+            // Guardar cita
+            mockAppointments.push(newAppointment);
+            
+            // Actualizar Vistas
+            renderAppointments();
+            renderAdminAppointments();
+            
+            document.getElementById('booking-form').reset();
+            showNotification("✅ Tu sesión ha sido reservada con éxito. Te hemos enviado un email de confirmación (Simulación).");
+            switchView('dashboard');
+        });
+
+        function renderAppointments() {
+            const list = document.getElementById('appointments-list');
+            
+            // Filtrar solo las citas del usuario actual (en una base de datos real esto se hace con una Query)
+            const myAppointments = mockAppointments.filter(appt => appt.patientEmail === currentUser.email);
+            
+            if(myAppointments.length === 0) {
+                list.innerHTML = `
+                    <div class="bg-white p-8 rounded-xl border border-base-200 text-center flex flex-col items-center">
+                        <div class="w-16 h-16 bg-base-100 rounded-full flex items-center justify-center mb-4">
+                            <i class="ph ph-calendar-blank text-2xl text-muted-400"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-brand-900 mb-1">Aún no tienes sesiones agendadas</h3>
+                        <p class="text-sm text-muted-500 mb-4">Reserva tu primer encuentro virtual cuando lo necesites.</p>
+                        <button onclick="switchView('booking')" class="text-brand-700 font-medium text-sm hover:underline">Agendar ahora</button>
+                    </div>`;
+                return;
+            }
+            
+            list.innerHTML = '';
+            // Ordenar por fecha cronológicamente
+            myAppointments.sort((a,b) => new Date(a.rawDate + 'T' + a.time) - new Date(b.rawDate + 'T' + b.time));
+
+            myAppointments.forEach(appt => {
+                // Capitalizar primera letra del día
+                const capDate = appt.displayDate.charAt(0).toUpperCase() + appt.displayDate.slice(1);
+                
+                list.innerHTML += `
+                    <div class="bg-white p-5 rounded-xl border border-brand-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-brand-300">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-brand-50 p-3 rounded-lg text-brand-700">
+                                <i class="ph ph-calendar-check text-2xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-brand-900 text-lg">${capDate}</p>
+                                <p class="text-sm text-muted-500 flex items-center gap-1 mt-1">
+                                    <i class="ph ph-clock"></i> Hora: ${appt.time}
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="startVideoSession('${appt.id}')" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors shadow-sm whitespace-nowrap">
+                            <i class="ph ph-video-camera text-lg"></i> Entrar a sesión
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // 4. SISTEMA CMS (Panel Admin)
+        function saveCMSContent() {
+            const title = document.getElementById('admin-title').value;
+            const desc = document.getElementById('admin-desc').value;
+            
+            // Actualizar el DOM de la página de inicio
+            document.getElementById('hero-title').innerText = title;
+            document.getElementById('hero-desc').innerText = desc;
+            
+            showNotification('✅ Textos actualizados correctamente en la página principal.');
+        }
+
+        function renderAdminAppointments() {
+            const adminList = document.getElementById('admin-appointments-list');
+            if(mockAppointments.length === 0) {
+                adminList.innerHTML = '<p class="text-sm text-muted-500 italic">No hay citas registradas aún.</p>';
+                return;
+            }
+            
+            adminList.innerHTML = '';
+            mockAppointments.forEach(appt => {
+                adminList.innerHTML += `
+                    <div class="p-3 border border-base-200 rounded-lg text-sm bg-base-50">
+                        <p class="font-medium text-brand-900">${appt.patientName}</p>
+                        <p class="text-muted-600">${appt.rawDate} a las ${appt.time}</p>
+                        <p class="text-xs text-muted-400 mt-1">${appt.patientEmail}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // 5. VIDEOLLAMADA (JITSI MEET)
+        function startVideoSession(appointmentId) {
+            // Pasamos un ID único para crear la sala específica de esta cita
+            switchView('video');
+        }
+
+        function initJitsi() {
+            if(jitsiApi) return; // Ya existe una instancia
+            
+            document.getElementById('jitsi-placeholder').classList.add('hidden');
+            
+            // Opciones de la API de Jitsi
+            const domain = 'meet.jit.si';
+            const options = {
+                roomName: 'ConsultorioSereno_Privado_' + Math.random().toString(36).substring(7),
+                width: '100%',
+                height: '100%',
+                parentNode: document.getElementById('jitsi-container'),
+                lang: 'es',
+                userInfo: {
+                    displayName: isUserLoggedIn ? currentUser.name : 'Paciente Invitado'
+                },
+                configOverwrite: {
+                    prejoinPageEnabled: false, // Entrar directo sin sala previa
+                    startWithAudioMuted: true
+                },
+                interfaceConfigOverwrite: {
+                    TOOLBAR_BUTTONS: [
+                        'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
+                        'fodeviceselection', 'hangup', 'profile', 'chat', 'settings', 'videoquality'
+                    ],
+                }
+            };
+            
+            jitsiApi = new JitsiMeetExternalAPI(domain, options);
+        }
+
+        function disposeJitsi() {
+            if(jitsiApi) {
+                jitsiApi.dispose(); // Cierra cámara, micro y conexión
+                jitsiApi = null;
+                document.getElementById('jitsi-placeholder').classList.remove('hidden');
+            }
+        }
+        
+        // 6. UTILIDADES
+        // Sistema de notificaciones en pantalla en lugar del molesto alert()
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'fixed bottom-4 right-4 bg-brand-900 text-white px-6 py-3 rounded-lg shadow-xl z-50 transform translate-y-full opacity-0 transition-all duration-300 flex items-center gap-3';
+            notif.innerHTML = `
+                <i class="ph ph-info text-xl text-brand-300"></i>
+                <span class="text-sm font-medium">${message}</span>
+            `;
+            document.body.appendChild(notif);
+            
+            // Animar entrada
+            setTimeout(() => {
+                notif.classList.remove('translate-y-full', 'opacity-0');
+            }, 100);
+            
+            // Ocultar y borrar tras 4 segundos
+            setTimeout(() => {
+                notif.classList.add('translate-y-full', 'opacity-0');
+                setTimeout(() => notif.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
